@@ -21,13 +21,17 @@ def user_api_view(request):
         users_serializer = UserSerializer(users, many=True)
 
         test_data = {
-            'name': 'John Doe',
+            'name': 'Rohn',
             'email': 'john.doe@example.com',
-            'age': 30
+            'age': 10
         }
-        test_serializer = TestSerializer(data=test_data)
+
+        test_serializer = TestSerializer(data=test_data, context = test_data)
+
         if test_serializer.is_valid():
-            print("Test Serializer is valid:", test_serializer.data) 
+            print("Validacion exitosa:") 
+        else:
+            print(test_serializer.errors)
 
         return Response(users_serializer.data, status=status.HTTP_200_OK)
     
