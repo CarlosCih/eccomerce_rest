@@ -19,22 +19,7 @@ def user_api_view(request):
     if request.method == 'GET':
         users = User.objects.all()
         users_serializer = UserSerializer(users, many=True)
-
-        test_data = {
-            'username': 'ProsRumvan',
-            'name': 'Rumvan',
-            'email': 'Pros@example.com',
-        }
-
-        test_serializer = TestSerializer(data=test_data, context = test_data)
-
-        if test_serializer.is_valid():
-            user_instance = test_serializer.save()
-
-            print("Usuario creado:" , user_instance) 
-        else:
-            print(test_serializer.errors)
-
+        
         return Response(users_serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST':
@@ -53,22 +38,21 @@ def user_detail_api_view(request, pk=None):
     user = User.objects.filter(id=pk).first()
 
     if user:
+        #get user
         if request.method == 'GET':
-            if user:
                 user_serializer = UserSerializer(user)
                 return Response(user_serializer.data, status=status.HTTP_200_OK)
-            
+        
+        #update user    
         elif request.method == 'PUT':
-            user = User.objects.filter(id=pk).first()
-            user_serializer = UserSerializer(user, data=request.data)
+            user_serializer = TestSerializer(user, data=request.data)
             if user_serializer.is_valid():
                 user_serializer.save()
                 return Response(user_serializer.data, status=status.HTTP_200_OK)
             return Response(user_serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
         
+        #delete user
         elif request.method == 'DELETE':
-            user = User.objects.filter(id=pk).first()
-            if user:
                 user.delete()
                 return Response({'message': 'Usuario eliminado correctamente!'}, status=status.HTTP_200_OK)
             #end if
