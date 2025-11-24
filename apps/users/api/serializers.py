@@ -11,9 +11,9 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TestSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
     name = serializers.CharField(max_length=100)
     email = serializers.EmailField()
-    age = serializers.IntegerField()
 
     #Validacion personalizada
     def validate_name(self, value):
@@ -32,13 +32,8 @@ class TestSerializer(serializers.Serializer):
             raise serializers.ValidationError("El email no puede contener el nombre", code='email_contains_name')
         return value
     
-    def validate_age(self, value):
-        if value < 0:
-            raise serializers.ValidationError("La edad no puede ser negativa", code='age negative')
-        
-        if self.context['age'] < 18:
-            raise serializers.ValidationError(" El usuario debe ser mayor de edad", code='underage')
-        return value
-    
     def validate(self, data):
         return data
+    
+    def create(self,validated_data):
+        return User.objects.create(**validated_data)
