@@ -4,9 +4,6 @@ from rest_framework.response import Response
 
 from rest_framework import generics, status
 
-class ProductListAPIView(GeneralListAPIView):
-    serializer_class = ProductSerializer
-    
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     
@@ -27,13 +24,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class ProductDetailAPIView(generics.RetrieveAPIView):
-    serializer_class = ProductSerializer
-    
-    def get_queryset(self):
-        return self.serializer_class.Meta.model.objects.filter(state=True)
-    
-class ProductDestroyAPIView(generics.DestroyAPIView):    
+class ProductDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
     
     def get_queryset(self):
@@ -47,12 +38,6 @@ class ProductDestroyAPIView(generics.DestroyAPIView):
             return Response({'message': 'Product deleted successfully'}, status=status.HTTP_200_OK)
         #end if
         return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
-    
-class ProductUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = ProductSerializer
-    
-    def get_queryset(self, pk=None):
-        return self.serializer_class.Meta.model.objects.filter(state=True).filter(id=pk).first()
     
     def patch(self, request, pk=None):
         if self.get_queryset(pk):
@@ -69,3 +54,4 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
             #end if
             return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         #end if
+    
