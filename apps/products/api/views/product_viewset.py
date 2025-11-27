@@ -3,7 +3,9 @@ from apps.products.api.serializers.product_serializers import ProductSerializer
 from rest_framework.response import Response
 
 from rest_framework import generics, status, viewsets
-class ProductViewSet(viewsets.ModelViewSet):
+from apps.users.authentication_mixins import Authentication
+
+class ProductViewSet(Authentication, viewsets.ModelViewSet):
     
     """
     Docstring for ProductViewSet

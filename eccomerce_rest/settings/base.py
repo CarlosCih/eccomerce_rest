@@ -46,6 +46,8 @@ SWAGGER_SETTINGS = {
     'DOC_EXPANSION': 'none',
 }
 
+TOKEN_EXPIRED_AFTER_SECONDS = 20  # 1 hour 
+
 # Configuracion de Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
